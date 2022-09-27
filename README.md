@@ -1,0 +1,2 @@
+# myclass
+Manage my class
