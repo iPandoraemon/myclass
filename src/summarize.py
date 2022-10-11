@@ -14,8 +14,10 @@ def collect_id(filedir):
     '''
     Collect student IDs
 
+    ---------------------------------------------------------------------------
     Param filedir is the folder name.
 
+    ---------------------------------------------------------------------------
     Return a dictionary type.
     '''
     ndict = {}
