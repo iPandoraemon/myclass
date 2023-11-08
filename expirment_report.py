@@ -21,7 +21,8 @@ def read_reports(folder_path: str, student_list_file: str,
     for root, dirs, files in os.walk(folder_path):
         students = {}
         for file in files:
-            split_root = root.split('\\')
+            split_root = re.split(r"[\\/]", root)
+            # root.split('\\｜//|/|\')
             exp_name = split_root[-1]
             split_file = re.split('[-.(]', file)
             if split_file[-1] != 'docx':
@@ -53,6 +54,7 @@ def read_reports(folder_path: str, student_list_file: str,
             # df = df.rename(columns={0: '学号', 1: '姓名', 2: exp_name})
             reports = reports.merge(df, on='学号', how='left')
             print(exp_name + ' 结束')
+    return reports
 
 
 def output_list(reports: pd.DataFrame, output_file: str, output_sheet: str):
