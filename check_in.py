@@ -19,6 +19,8 @@ if __name__ == '__main__':
     summary_file = [file for file in files if '考勤记录' in file and my_class in file][0]
     checkin_files = [file for file in files if '课考勤' in file]
 
+    summary = pd.read_csv(path+'/'+summary_file, header=0)
+
     for file in checkin_files:
         print(f'Checking file {path}/{file}...')
         xls = pd.ExcelFile(path+'/'+file)
@@ -32,8 +34,6 @@ if __name__ == '__main__':
         # 获取每次考勤的日期
         dates = checkin['date'].drop_duplicates().tolist()
 
-        summary = pd.read_csv(path+'/'+summary_file, header=0)
-
         for d in dates:
             if d in summary.columns.tolist():
                 print("{date}已经记录了".format(date=d))
@@ -42,8 +42,11 @@ if __name__ == '__main__':
             chk_list.index = chk_list['stu_num'].to_list()
             chk_list = chk_list[['name']]
             chk_list[d] = 1
+
             summary = summary.merge(right=chk_list, how="left")
             summary.fillna(value=0, inplace=True)
 
-        summary.to_csv(path+'/'+summary_file, encoding='utf-8', index=False)
-        print("{}/{} is updated and saved.".format(path, summary_file))
+    summary.drop_duplicates(inplace=True)
+
+    summary.to_csv(path+'/'+summary_file, encoding='utf-8', index=False)
+    print("{}/{} is updated and saved.".format(path, summary_file))
